@@ -10,7 +10,10 @@ import emoji from 'node-emoji';
 import responseTime from 'response-time';
 import favicon from 'serve-favicon';
 import indexRouter from './routes/index';
-
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import playerRouter from './player';
+import userRouter from './user';
 const app = express();
 
 // secure the server by setting various HTTP headers
@@ -18,6 +21,21 @@ app.use(helmet());
 
 // only parse JSON
 app.use(express.json());
+dotenv.config();
+app.use('/player', playerRouter);
+app.use('/player', userRouter);
+
+mongoose
+  .connect(
+    `mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.MONGO_PORT}/${process.env.DATABASE}`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
+  )
+  .then(() => {
+    console.log(emoji.get('heavy_check_mark'), 'MongoDB connection success');
+  });
 
 // only parse urlencoded bodies
 app.use(express.urlencoded({ extended: false }));
