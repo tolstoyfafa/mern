@@ -14,6 +14,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import playerRouter from './player';
 import userRouter from './user';
+import messageRouter from './message';
 const app = express();
 
 // secure the server by setting various HTTP headers
@@ -22,8 +23,9 @@ app.use(helmet());
 // only parse JSON
 app.use(express.json());
 dotenv.config();
-app.use('/player', playerRouter);
-app.use('/player', userRouter);
+app.use('/players', playerRouter);
+app.use('/users', userRouter);
+app.use('/messages', messageRouter);
 
 mongoose
   .connect(
