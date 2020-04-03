@@ -15,6 +15,7 @@ import dotenv from 'dotenv';
 import playerRouter from './player';
 import userRouter from './user';
 import messageRouter from './message';
+import personRouter from './person';
 const app = express();
 
 // secure the server by setting various HTTP headers
@@ -26,18 +27,11 @@ dotenv.config();
 app.use('/players', playerRouter);
 app.use('/users', userRouter);
 app.use('/messages', messageRouter);
+app.use('/auth', personRouter);
 
-mongoose
-  .connect(
-    `mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.MONGO_PORT}/${process.env.DATABASE}`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }
-  )
-  .then(() => {
-    console.log(emoji.get('heavy_check_mark'), 'MongoDB connection success');
-  });
+mongoose.connect(`mongodb://${process.env.HOST}:${process.env.MONGO_PORT}/${process.env.DATABASE}`).then(() => {
+  console.log(emoji.get('heavy_check_mark'), 'MongoDB connection success');
+});
 
 // only parse urlencoded bodies
 app.use(express.urlencoded({ extended: false }));
